@@ -1,20 +1,20 @@
-const productSchema = require("../../db/models/Product");
+const Product = require("../../db/models/Product");
 const productData = require("../../data");
 
 let productClone = productData;
 
-// exports.getProductController = async (req, res) => {
-//   try {
-//     const products = await productSchema.find();
-//     console.log(products);
-//     res.json(products);
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// };
 exports.getProductController = async (req, res) => {
-  res.json(productClone);
+  try {
+    const products = await Product.find();
+    console.log(products);
+    res.json(products);
+  } catch (error) {
+    res.status(500).json(error);
+  }
 };
+// exports.getProductController = async (req, res) => {
+//   res.json(productClone);
+// };
 
 exports.getSingleProductController = async (req, res) => {
   const { productId } = req.params;
