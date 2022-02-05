@@ -15,7 +15,7 @@ exports.getProductController = async (req, res) => {
   }
 };
 
-// 
+//make it work with database
 exports.getSingleProductController = async (req, res) => {
   const { productId } = req.params;
   const foundProduct = productClone.find(
@@ -35,27 +35,6 @@ exports.postProductController = async (req, res) => {
     res.status(400).json({ msg: error.message });
   }
 };
-// exports.postProductController = async (req, res) => {
-//   try {
-//     const { name, image, description, color, quantity, price } = req.body;
-//     const chicken = {
-//       id: productClone.at(-1).id + 1,
-//       name,
-//       slug: name.replace(" ", "-"),
-//       image,
-//       description,
-//       color,
-//       quantity,
-//       price,
-//     };
-//     productClone.push(chicken);
-//     res
-//       .status(201)
-//       .json({ msg: "product successfully created and added", chicken });
-//   } catch (error) {
-//     res.json(error, error.msg);
-//   }
-// };
 
 exports.deleteProductController = async (req, res) => {
   try {
@@ -72,27 +51,22 @@ exports.deleteProductController = async (req, res) => {
     res.status(400).json({ msg: error.message });
   }
 };
-// exports.deleteProductController = (req, res) => {
-//   const { productId } = req.params;
-//   const foundProduct = productClone.find(
-//     (product) => +product.id === +productId
-//   );
-//   if (foundProduct) {
-//     productClone = productClone.filter((product) => +product.id !== +productId);
-//     res
-//       .status(200)
-//       .json({ msg: `item with id: ${productId} has been deleted` });
-//   } else {
-//     res
-//       .status(404)
-//       .json({ msg: `product with id: ${productId} was not found` });
-//   }
-// };
 
-exports.updateProductController = await (req, res) => {
-  try{
+exports.updateProductController = async (req, res) => {
+  try {
     const { productId } = req.params;
+    const chicken = req.body;
+    const foundProduct = await Product.findByIdAndUpdate(productId);
+    await Product.updateOne(chicken);
 
+    if (foundProduct) {
+      res.status(201).json({ msg: `product ${productId} has been updated` });
+    } else {
+      res
+        .status(404)
+        .json({ msg: `product with id: ${productId} was not found` });
+    }
+  } catch {
+    res.status(400).json({ msg: error.message });
   }
-  catch{res.status(400).json({msg:error.message})}
-}
+};
