@@ -66,7 +66,7 @@ exports.updateProductController = async (req, res) => {
         .status(404)
         .json({ msg: `product with id: ${productId} was not found` });
     }
-  } catch {
+  } catch (error) {
     res.status(400).json({ msg: error.message });
   }
 };
